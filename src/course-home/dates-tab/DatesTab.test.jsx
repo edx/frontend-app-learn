@@ -32,7 +32,7 @@ describe('DatesTab', () => {
     component = (
       <AppProvider store={store}>
         <UserMessagesProvider>
-          <Route path="/course/:courseId/dates">
+          <Route path="/c/:courseId/dates">
             <TabContainer tab="dates" fetch={fetchDatesTab} slice="courseHome">
               <DatesTab />
             </TabContainer>
@@ -81,7 +81,7 @@ describe('DatesTab', () => {
     beforeEach(() => {
       axiosMock.onGet(courseMetadataUrl).reply(200, courseMetadata);
       axiosMock.onGet(datesUrl).reply(200, datesTabData);
-      history.push(`/course/${courseId}/dates`); // so tab can pull course id from url
+      history.push(`/c/${courseId}/dates`); // so tab can pull course id from url
 
       render(component);
     });
@@ -147,7 +147,7 @@ describe('DatesTab', () => {
   describe('Suggested schedule messaging', () => {
     beforeEach(() => {
       setMetadata({ is_self_paced: true, is_enrolled: true });
-      history.push(`/course/${courseId}/dates`);
+      history.push(`/c/${courseId}/dates`);
     });
 
     it('renders SuggestedScheduleHeader', async () => {
@@ -316,7 +316,7 @@ describe('DatesTab', () => {
 
     beforeEach(() => {
       axiosMock.onGet(datesUrl).reply(200, datesTabData);
-      history.push(`/course/${courseId}/dates`); // so tab can pull course id from url
+      history.push(`/c/${courseId}/dates`); // so tab can pull course id from url
     });
 
     it('redirects to course survey for a survey_required error code', async () => {

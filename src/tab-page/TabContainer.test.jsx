@@ -30,9 +30,9 @@ describe('Tab Container', () => {
   });
 
   it('renders correctly', () => {
-    history.push(`/course/${courseId}`);
+    history.push(`/c/${courseId}`);
     render(
-      <Route path="/course/:courseId">
+      <Route path="/c/:courseId">
         <TabContainer {...mockData} />
       </Route>,
     );
@@ -48,11 +48,11 @@ describe('Tab Container', () => {
 
   it('Should handle passing in a targetUserId', () => {
     const targetUserId = '1';
-    history.push(`/course/${courseId}/progress/${targetUserId}/`);
+    history.push(`/c/${courseId}/progress/${targetUserId}/`);
 
     render(
       <Route
-        path="/course/:courseId/progress/:targetUserId/"
+        path="/c/:courseId/progress/:targetUserId/"
         render={({ match }) => (
           <TabContainer
             fetch={() => mockFetch(match.params.courseId, match.params.targetUserId)}

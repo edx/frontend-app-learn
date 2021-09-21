@@ -159,7 +159,7 @@ describe('Outline Tab', () => {
       await fetchAndRender();
 
       const sequenceLink = screen.getByText('Title of Sequence');
-      expect(sequenceLink.getAttribute('href')).toContain(`/course/${courseId}`);
+      expect(sequenceLink.getAttribute('href')).toContain(`/c/${courseId}`);
     });
   });
 

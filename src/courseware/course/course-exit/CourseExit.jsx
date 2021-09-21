@@ -40,7 +40,7 @@ function CourseExit({ intl }) {
   } else if (mode === COURSE_EXIT_MODES.celebration) {
     body = (<CourseCelebration />);
   } else {
-    return (<Redirect to={`/course/${courseId}`} />);
+    return (<Redirect to={`/c/${courseId}`} />);
   }
 
   return (

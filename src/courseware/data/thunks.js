@@ -14,6 +14,7 @@ import {
 import {
   setsSpecialExamsEnabled,
   setsProctoredExamsEnabled,
+  setsShortLinkFeatureFlag,
   fetchCourseRequest,
   fetchCourseSuccess,
   fetchCourseFailure,
@@ -100,6 +101,7 @@ function mergeLearningSequencesWithCourseBlocks(learningSequencesModels, courseB
       effortActivities: blocksSequence.effortActivities,
       effortTime: blocksSequence.effortTime,
       legacyWebUrl: blocksSequence.legacyWebUrl,
+      hash_key: blocksSequence.hash_key,
       unitIds: blocksSequence.unitIds,
     };
 
@@ -151,6 +153,9 @@ export function fetchCourse(courseId) {
         dispatch(setsProctoredExamsEnabled({
           proctoredExamsEnabledWaffleFlag: courseMetadataResult.value.proctoredExamsEnabledWaffleFlag,
         }));
+        dispatch(setsShortLinkFeatureFlag({
+          shortLinkFeatureFlag: courseMetadataResult.value.shortLinkFeatureFlag,
+        }));
       }
 
       if (courseBlocksResult.status === 'fulfilled') {
@@ -176,8 +181,16 @@ export function fetchCourse(courseId) {
           modelType: 'sequences',
           modelsMap: sequences,
         }));
+        dispatch(addModelsMap({
+          modelType: 'sequenceIdToHashKeyMap',
+          modelsMap: sequences,
+        }));
         dispatch(updateModelsMap({
           modelType: 'units',
+          modelsMap: units,
+        }));
+        dispatch(addModelsMap({
+          modelType: 'unitIdToHashKeyMap',
           modelsMap: units,
         }));
       }
@@ -238,8 +251,16 @@ export function fetchSequence(sequenceId) {
           modelType: 'sequences',
           model: sequence,
         }));
+        dispatch(updateModel({
+          modelType: 'sequenceIdToHashKeyMap',
+          model: sequence,
+        }));
         dispatch(updateModels({
           modelType: 'units',
+          models: units,
+        }));
+        dispatch(updateModels({
+          modelType: 'unitIdToHashKeyMap',
           models: units,
         }));
         dispatch(fetchSequenceSuccess({ sequenceId }));
@@ -254,16 +275,24 @@ export function fetchSequence(sequenceId) {
 export function checkBlockCompletion(courseId, sequenceId, unitId) {
   return async (dispatch, getState) => {
     const { models } = getState();
-    if (models.units[unitId].complete) {
+    let modelsUnitId = unitId;
+    let modelsSequenceId = sequenceId;
+    if (!models.units[unitId]) {
+      modelsUnitId = models.unitIdToHashKeyMap[unitId];
+    }
+    if (!models.sequences[sequenceId]) {
+      modelsSequenceId = models.sequenceIdToHashKeyMap[sequenceId];
+    }
+    if (models.units[modelsUnitId].complete) {
       return; // do nothing. Things don't get uncompleted after they are completed.
     }
 
     try {
-      const isComplete = await getBlockCompletion(courseId, sequenceId, unitId);
+      const isComplete = await getBlockCompletion(courseId, modelsSequenceId, modelsUnitId);
       dispatch(updateModel({
         modelType: 'units',
         model: {
-          id: unitId,
+          id: modelsUnitId,
           complete: isComplete,
         },
       }));
@@ -276,23 +305,27 @@ export function checkBlockCompletion(courseId, sequenceId, unitId) {
 export function saveSequencePosition(courseId, sequenceId, activeUnitIndex) {
   return async (dispatch, getState) => {
     const { models } = getState();
-    const initialActiveUnitIndex = models.sequences[sequenceId].activeUnitIndex;
+    let modelsSequenceId = sequenceId;
+    if (!models.sequences[sequenceId]) {
+      modelsSequenceId = models.sequenceIdToHashKeyMap[sequenceId];
+    }
+    const initialActiveUnitIndex = models.sequences[modelsSequenceId].activeUnitIndex;
     // Optimistically update the position.
     dispatch(updateModel({
       modelType: 'sequences',
       model: {
-        id: sequenceId,
+        id: modelsSequenceId,
         activeUnitIndex,
       },
     }));
     try {
-      await postSequencePosition(courseId, sequenceId, activeUnitIndex);
+      await postSequencePosition(courseId, modelsSequenceId, activeUnitIndex);
       // Update again under the assumption that the above call succeeded, since it doesn't return a
       // meaningful response.
       dispatch(updateModel({
         modelType: 'sequences',
         model: {
-          id: sequenceId,
+          id: modelsSequenceId,
           activeUnitIndex,
         },
       }));
@@ -301,7 +334,7 @@ export function saveSequencePosition(courseId, sequenceId, activeUnitIndex) {
       dispatch(updateModel({
         modelType: 'sequences',
         model: {
-          id: sequenceId,
+          id: modelsSequenceId,
           activeUnitIndex: initialActiveUnitIndex,
         },
       }));

@@ -44,7 +44,7 @@ function SequenceLink({
   // canLoadCourseware is true if the Courseware MFE is enabled, false otherwise
   const coursewareUrl = (
     canLoadCourseware
-      ? <Link to={`/course/${courseId}/${id}`}>{title}</Link>
+      ? <Link to={`/c/${courseId}/${id}`}>{title}</Link>
       : <Hyperlink destination={legacyWebUrl}>{title}</Hyperlink>
   );
   const displayTitle = showLink ? coursewareUrl : title;

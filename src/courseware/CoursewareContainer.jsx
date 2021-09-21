@@ -17,15 +17,21 @@ import { TabPage } from '../tab-page';
 import Course from './course';
 import { handleNextSectionCelebration } from './course/celebration';
 
+const checkUrlLength = memoize((shortLinkFeatureFlag, courseStatus, courseId, sequence, unitHashKey) => {
+  if (shortLinkFeatureFlag && courseStatus === 'loaded' && sequence && unitHashKey) {
+    history.replace(`/c/${courseId}/${sequence.hash_key}/${unitHashKey}`);
+  }
+});
+
 const checkResumeRedirect = memoize((courseStatus, courseId, sequenceId, firstSequenceId) => {
   if (courseStatus === 'loaded' && !sequenceId) {
     // Note that getResumeBlock is just an API call, not a redux thunk.
     getResumeBlock(courseId).then((data) => {
       // This is a replace because we don't want this change saved in the browser's history.
       if (data.sectionId && data.unitId) {
-        history.replace(`/course/${courseId}/${data.sectionId}/${data.unitId}`);
+        history.replace(`/c/${courseId}/${data.sectionId}/${data.unitId}`);
       } else if (firstSequenceId) {
-        history.replace(`/course/${courseId}/${firstSequenceId}`);
+        history.replace(`/c/${courseId}/${firstSequenceId}`);
       }
     });
   }
@@ -33,7 +39,7 @@ const checkResumeRedirect = memoize((courseStatus, courseId, sequenceId, firstSe
 
 const checkSectionUnitToUnitRedirect = memoize((courseStatus, courseId, sequenceStatus, section, unitId) => {
   if (courseStatus === 'loaded' && sequenceStatus === 'failed' && section && unitId) {
-    history.replace(`/course/${courseId}/${unitId}`);
+    history.replace(`/c/${courseId}/${unitId}`);
   }
 });
 
@@ -41,10 +47,10 @@ const checkSectionToSequenceRedirect = memoize((courseStatus, courseId, sequence
   if (courseStatus === 'loaded' && sequenceStatus === 'failed' && section && !unitId) {
     // If the section is non-empty, redirect to its first sequence.
     if (section.sequenceIds && section.sequenceIds[0]) {
-      history.replace(`/course/${courseId}/${section.sequenceIds[0]}`);
+      history.replace(`/c/${courseId}/${section.sequenceIds[0]}`);
     // Otherwise, just go to the course root, letting the resume redirect take care of things.
     } else {
-      history.replace(`/course/${courseId}`);
+      history.replace(`/c/${courseId}`);
     }
   }
 });
@@ -53,7 +59,7 @@ const checkUnitToSequenceUnitRedirect = memoize((courseStatus, courseId, sequenc
   if (courseStatus === 'loaded' && sequenceStatus === 'failed' && unit) {
     // If the sequence failed to load as a sequence, but it *did* load as a unit, then
     // insert the unit's parent sequenceId into the URL.
-    history.replace(`/course/${courseId}/${unit.sequenceId}/${unit.id}`);
+    history.replace(`/c/${courseId}/${unit.sequenceId}/${unit.id}`);
   }
 });
 
@@ -72,7 +78,7 @@ const checkSequenceToSequenceUnitRedirect = memoize((courseId, sequenceStatus, s
     if (sequence.unitIds !== undefined && sequence.unitIds.length > 0) {
       const nextUnitId = sequence.unitIds[sequence.activeUnitIndex];
       // This is a replace because we don't want this change saved in the browser's history.
-      history.replace(`/course/${courseId}/${sequence.id}/${nextUnitId}`);
+      history.replace(`/c/${courseId}/${sequence.id}/${nextUnitId}`);
     }
   }
 });
@@ -106,13 +112,13 @@ class CoursewareContainer extends Component {
       match: {
         params: {
           courseId: routeCourseId,
-          sequenceId: routeSequenceId,
+          sequenceId: routeSequenceHash,
         },
       },
     } = this.props;
     // Load data whenever the course or sequence ID changes.
     this.checkFetchCourse(routeCourseId);
-    this.checkFetchSequence(routeSequenceId);
+    this.checkFetchSequence(routeSequenceHash);
   }
 
   componentDidUpdate() {
@@ -127,18 +133,28 @@ class CoursewareContainer extends Component {
       firstSequenceId,
       unitViaSequenceId,
       sectionViaSequenceId,
+      unitIdHashKeyMap,
+      shortLinkFeatureFlag,
       match: {
         params: {
           courseId: routeCourseId,
-          sequenceId: routeSequenceId,
+          sequenceId: routeSequenceHash,
           unitId: routeUnitId,
         },
       },
     } = this.props;
-
     // Load data whenever the course or sequence ID changes.
     this.checkFetchCourse(routeCourseId);
-    this.checkFetchSequence(routeSequenceId);
+    this.checkFetchSequence(routeSequenceHash);
+    if (sequence && routeSequenceHash.includes('block') && unitIdHashKeyMap) {
+      let unitHashKey;
+      Object.values(unitIdHashKeyMap).forEach(id => {
+        if (id === routeUnitId) {
+          unitHashKey = Object.keys(unitIdHashKeyMap).find(key => unitIdHashKeyMap[key] === id);
+        }
+      });
+      checkUrlLength(shortLinkFeatureFlag, courseStatus, courseId, sequence, unitHashKey);
+    }
 
     // All courseware URLs should normalize to the format /course/:courseId/:sequenceId/:unitId
     // via the series of redirection rules below.
@@ -201,7 +217,7 @@ class CoursewareContainer extends Component {
     } = this.props;
 
     this.props.checkBlockCompletion(courseId, sequenceId, routeUnitId);
-    history.push(`/course/${courseId}/${sequenceId}/${nextUnitId}`);
+    history.push(`/c/${courseId}/${sequenceId}/${nextUnitId}`);
   }
 
   handleNextSequenceClick = () => {
@@ -211,16 +227,20 @@ class CoursewareContainer extends Component {
       nextSequence,
       sequence,
       sequenceId,
+      shortLinkFeatureFlag,
     } = this.props;
-
     if (nextSequence !== null) {
+      let nextSequenceParam = nextSequence.id;
+      if (shortLinkFeatureFlag) {
+        nextSequenceParam = nextSequence.hash_key;
+      }
       let nextUnitId = null;
       if (nextSequence.unitIds.length > 0) {
         [nextUnitId] = nextSequence.unitIds;
-        history.push(`/course/${courseId}/${nextSequence.id}/${nextUnitId}`);
+        history.push(`/c/${courseId}/${nextSequenceParam}/${nextUnitId}`);
       } else {
         // Some sequences have no units.  This will show a blank page with prev/next buttons.
-        history.push(`/course/${courseId}/${nextSequence.id}`);
+        history.push(`/c/${courseId}/${nextSequenceParam}`);
       }
 
       const celebrateFirstSection = course && course.celebrations && course.celebrations.firstSection;
@@ -231,14 +251,22 @@ class CoursewareContainer extends Component {
   }
 
   handlePreviousSequenceClick = () => {
-    const { previousSequence, courseId } = this.props;
+    const {
+      previousSequence,
+      courseId,
+      shortLinkFeatureFlag,
+    } = this.props;
     if (previousSequence !== null) {
+      let previousSequenceParam = previousSequence.id;
+      if (shortLinkFeatureFlag) {
+        previousSequenceParam = previousSequence.hash_key;
+      }
       if (previousSequence.unitIds.length > 0) {
         const previousUnitId = previousSequence.unitIds[previousSequence.unitIds.length - 1];
-        history.push(`/course/${courseId}/${previousSequence.id}/${previousUnitId}`);
+        history.push(`/c/${courseId}/${previousSequenceParam}/${previousUnitId}`);
       } else {
         // Some sequences have no units.  This will show a blank page with prev/next buttons.
-        history.push(`/course/${courseId}/${previousSequence.id}`);
+        history.push(`/c/${courseId}/${previousSequenceParam}`);
       }
     }
   }
@@ -248,6 +276,9 @@ class CoursewareContainer extends Component {
       courseStatus,
       courseId,
       sequenceId,
+      sequence,
+      shortLinkFeatureFlag,
+      unitIdHashKeyMap,
       match: {
         params: {
           unitId: routeUnitId,
@@ -255,18 +286,30 @@ class CoursewareContainer extends Component {
       },
     } = this.props;
 
+    // This helps process old URLS that still use a blocks usage key in the URL.
+    let updatedSequenceId;
+    let updatedUnitId;
+    if (shortLinkFeatureFlag && sequence) {
+      if (!sequenceId.includes('block')) {
+        updatedSequenceId = sequence.id;
+      }
+      if (routeUnitId && !routeUnitId.includes('block')) {
+        updatedUnitId = unitIdHashKeyMap[routeUnitId];
+      }
+    }
+
     return (
       <TabPage
         activeTabSlug="courseware"
         courseId={courseId}
-        unitId={routeUnitId}
+        unitId={updatedUnitId || routeUnitId}
         courseStatus={courseStatus}
         metadataModel="coursewareMeta"
       >
         <Course
           courseId={courseId}
-          sequenceId={sequenceId}
-          unitId={routeUnitId}
+          sequenceId={updatedSequenceId || sequenceId}
+          unitId={updatedUnitId || routeUnitId}
           nextSequenceHandler={this.handleNextSequenceClick}
           previousSequenceHandler={this.handlePreviousSequenceClick}
           unitNavigationHandler={this.handleUnitNavigationClick}
@@ -285,6 +328,7 @@ const sequenceShape = PropTypes.shape({
   id: PropTypes.string.isRequired,
   unitIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   sectionId: PropTypes.string.isRequired,
+  hash_key: PropTypes.string.isRequired,
   isTimeLimited: PropTypes.bool,
   isProctored: PropTypes.bool,
   legacyWebUrl: PropTypes.string,
@@ -318,6 +362,7 @@ CoursewareContainer.propTypes = {
   previousSequence: sequenceShape,
   unitViaSequenceId: unitShape,
   sectionViaSequenceId: sectionShape,
+  unitIdHashKeyMap: unitShape,
   course: courseShape,
   sequence: sequenceShape,
   saveSequencePosition: PropTypes.func.isRequired,
@@ -326,6 +371,7 @@ CoursewareContainer.propTypes = {
   fetchSequence: PropTypes.func.isRequired,
   specialExamsEnabledWaffleFlag: PropTypes.bool.isRequired,
   proctoredExamsEnabledWaffleFlag: PropTypes.bool.isRequired,
+  shortLinkFeatureFlag: PropTypes.bool.isRequired,
 };
 
 CoursewareContainer.defaultProps = {
@@ -338,6 +384,7 @@ CoursewareContainer.defaultProps = {
   sectionViaSequenceId: null,
   course: null,
   sequence: null,
+  unitIdHashKeyMap: null,
 };
 
 const currentCourseSelector = createSelector(
@@ -349,7 +396,16 @@ const currentCourseSelector = createSelector(
 const currentSequenceSelector = createSelector(
   (state) => state.models.sequences || {},
   (state) => state.courseware.sequenceId,
-  (sequencesById, sequenceId) => (sequencesById[sequenceId] ? sequencesById[sequenceId] : null),
+  (state) => state.models.sequenceIdToHashKeyMap,
+  (sequencesById, sequenceId, sequenceMap) => {
+    if (!sequencesById[sequenceId] && Object.keys(sequencesById).length > 0 && sequenceMap) {
+      if (sequenceId in sequenceMap) {
+        const updatedSequenceId = sequenceMap[sequenceId];
+        return sequencesById[updatedSequenceId];
+      }
+    }
+    return sequencesById[sequenceId] ? sequencesById[sequenceId] : null;
+  },
 );
 
 const sequenceIdsSelector = createSelector(
@@ -369,11 +425,18 @@ const previousSequenceSelector = createSelector(
   sequenceIdsSelector,
   (state) => state.models.sequences || {},
   (state) => state.courseware.sequenceId,
-  (sequenceIds, sequencesById, sequenceId) => {
+  (state) => state.models.sequenceIdToHashKeyMap,
+  (sequenceIds, sequencesById, sequenceId, sequenceMap) => {
     if (!sequenceId || sequenceIds.length === 0) {
       return null;
     }
-    const sequenceIndex = sequenceIds.indexOf(sequenceId);
+    let sequenceIndex = sequenceIds.indexOf(sequenceId);
+    if (!sequencesById[sequenceId] && Object.keys(sequencesById).length > 0 && sequenceMap) {
+      if (sequenceId in sequenceMap) {
+        const updatedSequenceId = sequenceMap[sequenceId];
+        sequenceIndex = sequenceIds.indexOf(updatedSequenceId);
+      }
+    }
     const previousSequenceId = sequenceIndex > 0 ? sequenceIds[sequenceIndex - 1] : null;
     return previousSequenceId !== null ? sequencesById[previousSequenceId] : null;
   },
@@ -383,11 +446,18 @@ const nextSequenceSelector = createSelector(
   sequenceIdsSelector,
   (state) => state.models.sequences || {},
   (state) => state.courseware.sequenceId,
-  (sequenceIds, sequencesById, sequenceId) => {
+  (state) => state.models.sequenceIdToHashKeyMap,
+  (sequenceIds, sequencesById, sequenceId, sequenceMap) => {
     if (!sequenceId || sequenceIds.length === 0) {
       return null;
     }
-    const sequenceIndex = sequenceIds.indexOf(sequenceId);
+    let sequenceIndex = sequenceIds.indexOf(sequenceId);
+    if (!sequencesById[sequenceId] && Object.keys(sequencesById).length > 0 && sequenceMap) {
+      if (sequenceId in sequenceMap) {
+        const updatedSequenceId = sequenceMap[sequenceId];
+        sequenceIndex = sequenceIds.indexOf(updatedSequenceId);
+      }
+    }
     const nextSequenceId = sequenceIndex < sequenceIds.length - 1 ? sequenceIds[sequenceIndex + 1] : null;
     return nextSequenceId !== null ? sequencesById[nextSequenceId] : null;
   },
@@ -420,7 +490,21 @@ const sectionViaSequenceIdSelector = createSelector(
 const unitViaSequenceIdSelector = createSelector(
   (state) => state.models.units || {},
   (state) => state.courseware.sequenceId,
-  (unitsById, sequenceId) => (unitsById[sequenceId] ? unitsById[sequenceId] : null),
+  (state) => state.models.unitIdHashKeyMap,
+  (unitsById, sequenceId, unitMap) => {
+    if (!unitsById[sequenceId] && Object.keys(unitsById).length > 0 && unitMap) {
+      if (sequenceId in unitMap) {
+        const updatedSequenceId = unitMap[sequenceId];
+        return unitsById[updatedSequenceId];
+      }
+    }
+    return unitsById[sequenceId] ? unitsById[sequenceId] : null;
+  },
+);
+
+const unitIdHashKeyMapSelector = createSelector(
+  (state) => state.models.unitIdToHashKeyMap,
+  (unitIdToHashKeyMap) => (unitIdToHashKeyMap),
 );
 
 const mapStateToProps = (state) => {
@@ -431,6 +515,7 @@ const mapStateToProps = (state) => {
     sequenceStatus,
     specialExamsEnabledWaffleFlag,
     proctoredExamsEnabledWaffleFlag,
+    shortLinkFeatureFlag,
   } = state.courseware;
 
   return {
@@ -440,6 +525,7 @@ const mapStateToProps = (state) => {
     sequenceStatus,
     specialExamsEnabledWaffleFlag,
     proctoredExamsEnabledWaffleFlag,
+    shortLinkFeatureFlag,
     course: currentCourseSelector(state),
     sequence: currentSequenceSelector(state),
     previousSequence: previousSequenceSelector(state),
@@ -447,6 +533,7 @@ const mapStateToProps = (state) => {
     firstSequenceId: firstSequenceIdSelector(state),
     sectionViaSequenceId: sectionViaSequenceIdSelector(state),
     unitViaSequenceId: unitViaSequenceIdSelector(state),
+    unitIdHashKeyMap: unitIdHashKeyMapSelector(state),
   };
 };
 

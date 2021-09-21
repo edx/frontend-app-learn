@@ -36,20 +36,21 @@ subscribe(APP_READY, () => {
         <Switch>
           <PageRoute exact path="/goal-unsubscribe/:token" component={GoalUnsubscribe} />
           <PageRoute path="/redirect" component={CoursewareRedirectLandingPage} />
-          <PageRoute path="/course/:courseId/home">
+          <PageRoute path="/course" component={CoursewareRedirectLandingPage} />
+          <PageRoute path="/c/:courseId/home">
             <TabContainer tab="outline" fetch={fetchOutlineTab} slice="courseHome">
               <OutlineTab />
             </TabContainer>
           </PageRoute>
-          <PageRoute path="/course/:courseId/dates">
+          <PageRoute path="/c/:courseId/dates">
             <TabContainer tab="dates" fetch={fetchDatesTab} slice="courseHome">
               <DatesTab />
             </TabContainer>
           </PageRoute>
           <PageRoute
             path={[
-              '/course/:courseId/progress/:targetUserId/',
-              '/course/:courseId/progress',
+              '/c/:courseId/progress/:targetUserId/',
+              '/c/:courseId/progress',
             ]}
             render={({ match }) => (
               <TabContainer
@@ -61,16 +62,16 @@ subscribe(APP_READY, () => {
               </TabContainer>
             )}
           />
-          <PageRoute path="/course/:courseId/course-end">
+          <PageRoute path="/c/:courseId/course-end">
             <TabContainer tab="courseware" fetch={fetchCourse} slice="courseware">
               <CourseExit />
             </TabContainer>
           </PageRoute>
           <PageRoute
             path={[
-              '/course/:courseId/:sequenceId/:unitId',
-              '/course/:courseId/:sequenceId',
-              '/course/:courseId',
+              '/c/:courseId/:sequenceId/:unitId',
+              '/c/:courseId/:sequenceId',
+              '/c/:courseId',
             ]}
             component={CoursewareContainer}
           />

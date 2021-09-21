@@ -15,6 +15,7 @@ const slice = createSlice({
     sequenceId: null,
     specialExamsEnabledWaffleFlag: false,
     proctoredExamsEnabledWaffleFlag: false,
+    shortLinkFeatureFlag: false,
   },
   reducers: {
     setsSpecialExamsEnabled: (state, { payload }) => {
@@ -22,6 +23,9 @@ const slice = createSlice({
     },
     setsProctoredExamsEnabled: (state, { payload }) => {
       state.proctoredExamsEnabledWaffleFlag = payload.proctoredExamsEnabledWaffleFlag;
+    },
+    setsShortLinkFeatureFlag: (state, { payload }) => {
+      state.shortLinkFeatureFlag = payload.shortLinkFeatureFlag;
     },
     fetchCourseRequest: (state, { payload }) => {
       state.courseId = payload.courseId;
@@ -57,6 +61,7 @@ const slice = createSlice({
 export const {
   setsSpecialExamsEnabled,
   setsProctoredExamsEnabled,
+  setsShortLinkFeatureFlag,
   fetchCourseRequest,
   fetchCourseSuccess,
   fetchCourseFailure,

@@ -254,8 +254,7 @@ describe('Data layer integration tests', () => {
     });
 
     describe('Test checkBlockCompletion', () => {
-      const getCompletionURL = `${getConfig().LMS_BASE_URL}/courses/${courseId}/xblock/${sequenceId}/handler/get_completion`;
-
+      const getCompletionURL = `${getConfig().LMS_BASE_URL}/courses/${courseId}/xblock/${sequenceMetadata.decoded_id}/handler/get_completion`;
       it('Should fail to check completion and log error', async () => {
         axiosMock.onPost(getCompletionURL).networkError();
 
@@ -283,7 +282,7 @@ describe('Data layer integration tests', () => {
     });
 
     describe('Test saveSequencePosition', () => {
-      const gotoPositionURL = `${getConfig().LMS_BASE_URL}/courses/${courseId}/xblock/${sequenceId}/handler/goto_position`;
+      const gotoPositionURL = `${getConfig().LMS_BASE_URL}/courses/${courseId}/xblock/${sequenceMetadata.decoded_id}/handler/goto_position`;
 
       it('Should change and revert sequence model activeUnitIndex in case of error', async () => {
         axiosMock.onPost(gotoPositionURL).networkError();

@@ -28,6 +28,7 @@ function Section({
     courseBlocks: {
       sequences,
     },
+    shortLinkFeatureFlag,
   } = useModel('outline', courseId);
 
   const [open, setOpen] = useState(defaultOpen);
@@ -39,6 +40,28 @@ function Section({
   useEffect(() => {
     setOpen(defaultOpen);
   }, []);
+  let sequenceLinks;
+  if (shortLinkFeatureFlag) {
+    sequenceLinks = sequenceIds.map((sequenceId, index) => (
+      <SequenceLink
+        key={sequenceId}
+        id={sequences[sequenceId].hash_key}
+        courseId={courseId}
+        sequence={sequences[sequenceId]}
+        first={index === 0}
+      />
+    ));
+  } else {
+    sequenceLinks = sequenceIds.map((sequenceId, index) => (
+      <SequenceLink
+        key={sequenceId}
+        id={sequenceId}
+        courseId={courseId}
+        sequence={sequences[sequenceId]}
+        first={index === 0}
+      />
+    ));
+  }
 
   const sectionTitle = (
     <div className="row w-100 m-0">
@@ -96,15 +119,7 @@ function Section({
         )}
       >
         <ol className="list-unstyled">
-          {sequenceIds.map((sequenceId, index) => (
-            <SequenceLink
-              key={sequenceId}
-              id={sequenceId}
-              courseId={courseId}
-              sequence={sequences[sequenceId]}
-              first={index === 0}
-            />
-          ))}
+          {sequenceLinks}
         </ol>
       </Collapsible>
     </li>

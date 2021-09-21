@@ -38,6 +38,6 @@ describe('Content Lock', () => {
     render(<ContentLock {...mockData} />);
     fireEvent.click(screen.getByRole('button'));
 
-    expect(history.push).toHaveBeenCalledWith(`/course/${mockData.courseId}/${mockData.prereqId}`);
+    expect(history.push).toHaveBeenCalledWith(`/c/${mockData.courseId}/${mockData.prereqId}`);
   });
 });

@@ -173,7 +173,7 @@ function Sequence({
 
   const gated = sequence && sequence.gatedContent !== undefined && sequence.gatedContent.gated;
   const goToCourseExitPage = () => {
-    history.push(`/course/${courseId}/course-end`);
+    history.push(`/c/${courseId}/course-end`);
   };
 
   const defaultContent = (

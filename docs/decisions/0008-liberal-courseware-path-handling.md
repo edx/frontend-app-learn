@@ -88,3 +88,6 @@ And more like:
 ```
 https://learning.edx.org/course/course-v1:edX+DemoX.1+2T2019/Being_Social/Teams
 ```
+
+_This further work has been expanded upon in
+[ADR #9: Courseware URL shortening](./0009-courseware-url-shortening.md)._

@@ -94,7 +94,7 @@ describe('Course Exit Pages', () => {
         },
       });
       await fetchAndRender(<CourseExit />);
-      expect(global.location.href).toEqual(`http://localhost/course/${defaultMetadata.id}`);
+      expect(global.location.href).toEqual(`http://localhost/c/${defaultMetadata.id}`);
     });
   });
 

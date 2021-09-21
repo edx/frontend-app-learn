@@ -60,4 +60,5 @@ Factory.define('outlineTabData')
     handouts_html: '<ul><li>Handout 1</li></ul>',
     offer: null,
     welcome_message_html: '<p>Welcome to this course!</p>',
+    mfe_short_url_is_active: true,
   });

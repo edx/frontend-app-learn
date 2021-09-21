@@ -58,4 +58,5 @@ Factory.define('courseMetadata')
     is_mfe_special_exams_enabled: false,
     is_mfe_proctored_exams_enabled: false,
     recommendations: null,
+    mfe_short_url_is_active: true,
   });

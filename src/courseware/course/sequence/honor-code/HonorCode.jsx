@@ -13,7 +13,7 @@ function HonorCode({ intl, courseId }) {
   const siteName = getConfig().SITE_NAME;
   const honorCodeUrl = `${process.env.TERMS_OF_SERVICE_URL}#honor-code`;
 
-  const handleCancel = () => history.push(`/course/${courseId}/home`);
+  const handleCancel = () => history.push(`/c/${courseId}/home`);
 
   const handleAgree = () => {
     dispatch(saveIntegritySignature(courseId));

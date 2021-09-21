@@ -38,6 +38,7 @@ export function normalizeBlocks(courseId, blocks) {
           title: block.display_name,
           legacyWebUrl: block.legacy_web_url,
           unitIds: block.children || [],
+          hash_key: block.hash_key,
         };
         break;
       case 'vertical':
@@ -46,6 +47,7 @@ export function normalizeBlocks(courseId, blocks) {
           id: block.id,
           title: block.display_name,
           legacyWebUrl: block.legacy_web_url,
+          hash_key: block.hash_key,
         };
         break;
       default:
@@ -87,7 +89,6 @@ export function normalizeBlocks(courseId, blocks) {
       });
     }
   });
-
   return models;
 }
 
@@ -222,6 +223,7 @@ function normalizeMetadata(metadata) {
     specialExamsEnabledWaffleFlag: data.is_mfe_special_exams_enabled,
     proctoredExamsEnabledWaffleFlag: data.is_mfe_proctored_exams_enabled,
     isMasquerading: data.original_user_is_staff && !data.is_staff,
+    shortLinkFeatureFlag: data.mfe_short_url_is_active,
   };
 }
 
@@ -259,6 +261,8 @@ function normalizeSequenceMetadata(sequence) {
       saveUnitPosition: sequence.save_position,
       showCompletion: sequence.show_completion,
       allowProctoringOptOut: sequence.allow_proctoring_opt_out,
+      hash_key: sequence.hash_key,
+      decoded_id: sequence.decoded_id,
     },
     units: sequence.items.map(unit => ({
       id: unit.id,
@@ -269,14 +273,14 @@ function normalizeSequenceMetadata(sequence) {
       contentType: unit.type,
       graded: unit.graded,
       containsContentTypeGatedContent: unit.contains_content_type_gated_content,
+      decoded_id: unit.decoded_id,
+      hash_key: unit.hash_key,
     })),
   };
 }
-
 export async function getSequenceMetadata(sequenceId) {
   const { data } = await getAuthenticatedHttpClient()
     .get(`${getConfig().LMS_BASE_URL}/api/courseware/sequence/${sequenceId}`, {});
-
   return normalizeSequenceMetadata(data);
 }
 

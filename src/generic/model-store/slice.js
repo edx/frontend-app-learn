@@ -6,12 +6,18 @@ function add(state, modelType, model) {
   if (state[modelType] === undefined) {
     state[modelType] = {};
   }
+  if (modelType.includes('IdToHashKeyMap')) {
+    state[modelType][model.hash_key] = id;
+  }
   state[modelType][id] = model;
 }
 
 function update(state, modelType, model) {
   if (state[modelType] === undefined) {
     state[modelType] = {};
+  }
+  if (modelType.includes('IdToHashKeyMap')) {
+    state[modelType][model.hash_key] = model.id;
   }
   state[modelType][model.id] = { ...state[modelType][model.id], ...model };
 }

@@ -145,6 +145,7 @@ export function normalizeOutlineBlocks(courseId, blocks) {
           // link to the MFE ourselves).
           showLink: !!block.legacy_web_url,
           title: block.display_name,
+          hash_key: block.hash_key,
         };
         break;
 
@@ -354,6 +355,7 @@ export async function getOutlineTabData(courseId) {
   const userHasPassingGrade = data.user_has_passing_grade;
   const verifiedMode = camelCaseObject(data.verified_mode);
   const welcomeMessageHtml = data.welcome_message_html;
+  const shortLinkFeatureFlag = data.mfe_short_url_is_active;
 
   return {
     accessExpiration,
@@ -375,6 +377,7 @@ export async function getOutlineTabData(courseId) {
     userHasPassingGrade,
     verifiedMode,
     welcomeMessageHtml,
+    shortLinkFeatureFlag,
   };
 }
 

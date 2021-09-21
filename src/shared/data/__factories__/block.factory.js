@@ -23,6 +23,13 @@ Factory.define('block')
     return blockId;
   })
   .attr(
+    'hash_key', ['block_id'],
+    (blockId) => {
+      const len = blockId.length;
+      return blockId.substring(23, len);
+    },
+  )
+  .attr(
     'id',
     ['id', 'block_id', 'type', 'courseId'],
     (id, blockId, type, courseId) => {
@@ -36,24 +43,32 @@ Factory.define('block')
     },
   )
   .attr(
+    'decoded_id', ['block_id', 'type', 'courseId'],
+    (blockId, type, courseId) => {
+      const courseInfo = courseId.split(':')[1];
+
+      return `block-v1:${courseInfo}+type@${type}+block@${blockId}`;
+    },
+  )
+  .attr(
     'student_view_url',
-    ['student_view_url', 'host', 'id'],
-    (url, host, id) => {
+    ['student_view_url', 'host', 'decoded_id'],
+    (url, host, decodedId) => {
       if (url) {
         return url;
       }
 
-      return `${host}/xblock/${id}`;
+      return `${host}/xblock/${decodedId}`;
     },
   )
   .attr(
     'legacy_web_url',
-    ['legacy_web_url', 'host', 'courseId', 'id'],
-    (url, host, courseId, id) => {
+    ['legacy_web_url', 'host', 'courseId', 'decoded_id'],
+    (url, host, courseId, decodedId) => {
       if (url) {
         return url;
       }
 
-      return `${host}/courses/${courseId}/jump_to/${id}?experience=legacy`;
+      return `${host}/courses/${courseId}/jump_to/${decodedId}?experience=legacy`;
     },
   );

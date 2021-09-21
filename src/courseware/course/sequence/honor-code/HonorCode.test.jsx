@@ -28,6 +28,6 @@ describe('Honor Code', () => {
 
     const cancelButton = screen.getByText('Cancel');
     fireEvent.click(cancelButton);
-    expect(history.push).toHaveBeenCalledWith(`/course/${mockData.courseId}/home`);
+    expect(history.push).toHaveBeenCalledWith(`/c/${mockData.courseId}/home`);
   });
 });

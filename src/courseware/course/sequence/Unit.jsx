@@ -89,9 +89,10 @@ function Unit({
   /** [MM-P2P] Experiment */
   mmp2p,
 }) {
+  const unit = useModel('units', id);
   const { authenticatedUser } = useContext(AppContext);
   const view = authenticatedUser ? 'student_view' : 'public_view';
-  let iframeUrl = `${getConfig().LMS_BASE_URL}/xblock/${id}?show_title=0&show_bookmark_button=0&recheck_access=1&view=${view}`;
+  let iframeUrl = `${getConfig().LMS_BASE_URL}/xblock/${(unit.decoded_id || id)}?show_title=0&show_bookmark_button=0&recheck_access=1&view=${view}`;
   if (format) {
     iframeUrl += `&format=${format}`;
   }
@@ -101,7 +102,6 @@ function Unit({
   const [modalOptions, setModalOptions] = useState({ open: false });
   const [shouldDisplayHonorCode, setShouldDisplayHonorCode] = useState(false);
 
-  const unit = useModel('units', id);
   const course = useModel('coursewareMeta', courseId);
   const {
     contentTypeGatingEnabled,

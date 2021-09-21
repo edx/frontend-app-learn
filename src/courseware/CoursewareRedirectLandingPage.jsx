@@ -26,6 +26,12 @@ export default () => {
           component={CoursewareRedirect}
         />
         <PageRoute
+          path={`${path}/:courseId/:sequenceId/:unitId`}
+          render={({ match }) => {
+            global.location.assign(`/c/${match.params.courseId}/${match.params.sequenceId}/${match.params.unitId}`);
+          }}
+        />
+        <PageRoute
           path={`${path}/course-home/:courseId`}
           render={({ match }) => {
             global.location.assign(`${getConfig().LMS_BASE_URL}/courses/${match.params.courseId}/course/`);

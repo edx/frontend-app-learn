@@ -16,6 +16,7 @@ Object {
     "proctoredExamsEnabledWaffleFlag": false,
     "sequenceId": null,
     "sequenceStatus": "loading",
+    "shortLinkFeatureFlag": false,
     "specialExamsEnabledWaffleFlag": false,
   },
   "models": Object {
@@ -322,6 +323,7 @@ Object {
     "proctoredExamsEnabledWaffleFlag": false,
     "sequenceId": null,
     "sequenceStatus": "loading",
+    "shortLinkFeatureFlag": false,
     "specialExamsEnabledWaffleFlag": false,
   },
   "models": Object {
@@ -426,6 +428,7 @@ Object {
               "due": null,
               "effortActivities": 2,
               "effortTime": 15,
+              "hash_key": "abcdabcd1",
               "icon": null,
               "id": "block-v1:edX+DemoX+Demo_Course+type@sequential+block@bcdabcdabcdabcdabcdabcdabcdabcd1",
               "legacyWebUrl": "http://localhost:18000/courses/course-v1:edX+DemoX+Demo_Course/jump_to/block-v1:edX+DemoX+Demo_Course+type@sequential+block@bcdabcdabcdabcdabcdabcdabcdabcd1?experience=legacy",
@@ -468,6 +471,7 @@ Object {
           "hasVisitedCourse": false,
           "url": "http://localhost:18000/courses/course-v1:edX+DemoX+Demo_Course/jump_to/block-v1:edX+Test+Block@12345abcde",
         },
+        "shortLinkFeatureFlag": true,
         "timeOffsetMillis": 0,
         "userHasPassingGrade": undefined,
         "verifiedMode": Object {
@@ -504,6 +508,7 @@ Object {
     "proctoredExamsEnabledWaffleFlag": false,
     "sequenceId": null,
     "sequenceStatus": "loading",
+    "shortLinkFeatureFlag": false,
     "specialExamsEnabledWaffleFlag": false,
   },
   "models": Object {
