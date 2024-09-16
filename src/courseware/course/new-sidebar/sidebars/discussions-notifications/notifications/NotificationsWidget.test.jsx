@@ -18,8 +18,21 @@ import SidebarContext from '../../../SidebarContext';
 import NotificationsWidget from './NotificationsWidget';
 import setupDiscussionSidebar from '../../../../test-utils';
 
-initializeMockApp();
 jest.mock('@edx/frontend-platform/analytics');
+
+/* eslint-disable react/prop-types */
+jest.mock('@openedx/frontend-plugin-framework', () => ({
+  ...jest.requireActual('@openedx/frontend-plugin-framework'),
+  Plugin: () => 'Plugin',
+  PluginSlot: ({ id, pluginProps }) => (
+    <div data-testid={id}>
+      <button type="button" onClick={pluginProps?.toggleSidebar}>Close</button>
+      PluginSlot_{id}
+    </div>
+  ),
+}));
+
+initializeMockApp();
 
 describe('NotificationsWidget', () => {
   let axiosMock;
@@ -91,27 +104,6 @@ describe('NotificationsWidget', () => {
       </SidebarContext.Provider>,
     );
     expect(screen.getByTestId('notification_widget_slot')).toBeInTheDocument();
-  });
-
-  it('renders upgrade card', async () => {
-    await fetchAndRender(
-      <SidebarContext.Provider value={{
-        currentSidebar: ID,
-        courseId,
-        hideNotificationbar: false,
-        isNotificationbarAvailable: true,
-      }}
-      >
-        <NotificationsWidget />
-      </SidebarContext.Provider>,
-    );
-
-    // The Upgrade Notification should be inside the PluginSlot.
-    const UpgradeNotification = document.querySelector('.upgrade-notification');
-    expect(UpgradeNotification).toBeInTheDocument();
-
-    expect(screen.getByRole('link', { name: 'Upgrade for $149' })).toBeInTheDocument();
-    expect(screen.queryByText('You have no new notifications at this time.')).not.toBeInTheDocument();
   });
 
   it('renders no notifications bar if no verified mode', async () => {

@@ -3,7 +3,6 @@ import React, { useContext, useEffect, useMemo } from 'react';
 import { sendTrackEvent } from '@edx/frontend-platform/analytics';
 import { PluginSlot } from '@openedx/frontend-plugin-framework';
 import { useModel } from '../../../../../../generic/model-store';
-import UpgradeNotification from '../../../../../../generic/upgrade-notification/UpgradeNotification';
 import { WIDGETS } from '../../../../../../constants';
 import SidebarContext from '../../../SidebarContext';
 
@@ -21,17 +20,11 @@ const NotificationsWidget = () => {
   const course = useModel('coursewareMeta', courseId);
 
   const {
-    accessExpiration,
-    contentTypeGatingEnabled,
     end,
     enrollmentEnd,
     enrollmentMode,
     enrollmentStart,
-    marketingUrl,
-    offer,
     start,
-    timeOffsetMillis,
-    userTimezone,
     verificationStatus,
   } = course;
 
@@ -81,24 +74,7 @@ const NotificationsWidget = () => {
           setNotificationCurrentState: setUpgradeNotificationCurrentState,
           toggleSidebar: onToggleSidebar,
         }}
-      >
-        <UpgradeNotification
-          offer={offer}
-          verifiedMode={verifiedMode}
-          accessExpiration={accessExpiration}
-          contentTypeGatingEnabled={contentTypeGatingEnabled}
-          marketingUrl={marketingUrl}
-          upsellPageName="in_course"
-          userTimezone={userTimezone}
-          shouldDisplayBorder={false}
-          timeOffsetMillis={timeOffsetMillis}
-          courseId={courseId}
-          org={org}
-          upgradeNotificationCurrentState={upgradeNotificationCurrentState}
-          setupgradeNotificationCurrentState={setUpgradeNotificationCurrentState}
-          toggleSidebar={onToggleSidebar}
-        />
-      </PluginSlot>
+      />
     </div>
   );
 };

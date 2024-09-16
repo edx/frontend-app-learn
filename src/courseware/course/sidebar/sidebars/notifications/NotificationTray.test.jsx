@@ -94,26 +94,6 @@ describe('NotificationTray', () => {
     expect(screen.getByTestId('notification_tray_slot')).toBeInTheDocument();
   });
 
-  it('renders upgrade card', async () => {
-    await fetchAndRender(
-      <SidebarContext.Provider value={{
-        currentSidebar: ID,
-        courseId,
-      }}
-      >
-        <NotificationTray />
-      </SidebarContext.Provider>,
-    );
-
-    expect(document.querySelector('.upgrade-notification')).toBeInTheDocument();
-
-    expect(screen.getByRole('link', { name: 'Upgrade for $149' }))
-      .toBeInTheDocument();
-    expect(screen.queryByText('You have no new notifications at this time.'))
-      .not
-      .toBeInTheDocument();
-  });
-
   it('renders no notifications message if no verified mode', async () => {
     setMetadata({ verified_mode: null });
     await fetchAndRender(

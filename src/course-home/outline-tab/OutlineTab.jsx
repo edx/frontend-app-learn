@@ -17,7 +17,6 @@ import { fetchOutlineTab } from '../data';
 import messages from './messages';
 import Section from './Section';
 import ShiftDatesAlert from '../suggested-schedule-messaging/ShiftDatesAlert';
-import UpgradeNotification from '../../generic/upgrade-notification/UpgradeNotification';
 import UpgradeToShiftDatesAlert from '../suggested-schedule-messaging/UpgradeToShiftDatesAlert';
 import useCertificateAvailableAlert from './alerts/certificate-status-alert';
 import useCourseEndAlert from './alerts/course-end-alert';
@@ -39,11 +38,9 @@ const OutlineTab = ({ intl }) => {
     isSelfPaced,
     org,
     title,
-    userTimezone,
   } = useModel('courseHomeMeta', courseId);
 
   const {
-    accessExpiration,
     courseBlocks: {
       courses,
       sections,
@@ -52,19 +49,11 @@ const OutlineTab = ({ intl }) => {
       selectedGoal,
       weeklyLearningGoalEnabled,
     } = {},
-    datesBannerInfo,
     datesWidget: {
       courseDateBlocks,
     },
     enableProctoredExams,
-    offer,
-    timeOffsetMillis,
-    verifiedMode,
   } = useModel('outline', courseId);
-
-  const {
-    marketingUrl,
-  } = useModel('coursewareMeta', courseId);
 
   const [expandAll, setExpandAll] = useState(false);
   const navigate = useNavigate();
@@ -198,21 +187,7 @@ const OutlineTab = ({ intl }) => {
             <PluginSlot
               id="outline_tab_notifications_slot"
               pluginProps={{ courseId }}
-            >
-              <UpgradeNotification
-                offer={offer}
-                verifiedMode={verifiedMode}
-                accessExpiration={accessExpiration}
-                contentTypeGatingEnabled={datesBannerInfo.contentTypeGatingEnabled}
-                marketingUrl={marketingUrl}
-                upsellPageName="course_home"
-                userTimezone={userTimezone}
-                shouldDisplayBorder
-                timeOffsetMillis={timeOffsetMillis}
-                courseId={courseId}
-                org={org}
-              />
-            </PluginSlot>
+            />
             <CourseDates />
             <CourseHandouts />
           </div>

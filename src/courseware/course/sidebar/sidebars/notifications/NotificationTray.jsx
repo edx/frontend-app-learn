@@ -5,7 +5,6 @@ import { sendTrackEvent } from '@edx/frontend-platform/analytics';
 import { PluginSlot } from '@openedx/frontend-plugin-framework';
 import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
 import { useModel } from '@src/generic/model-store';
-import UpgradeNotification from '../../../../../generic/upgrade-notification/UpgradeNotification';
 
 import messages from '../../../messages';
 import SidebarBase from '../../common/SidebarBase';
@@ -23,17 +22,11 @@ const NotificationTray = ({ intl }) => {
   const course = useModel('coursewareMeta', courseId);
 
   const {
-    accessExpiration,
-    contentTypeGatingEnabled,
     end,
     enrollmentEnd,
     enrollmentMode,
     enrollmentStart,
-    marketingUrl,
-    offer,
     start,
-    timeOffsetMillis,
-    userTimezone,
     verificationStatus,
   } = course;
 
@@ -88,23 +81,7 @@ const NotificationTray = ({ intl }) => {
               notificationCurrentState: upgradeNotificationCurrentState,
               setNotificationCurrentState: setUpgradeNotificationCurrentState,
             }}
-          >
-            <UpgradeNotification
-              offer={offer}
-              verifiedMode={verifiedMode}
-              accessExpiration={accessExpiration}
-              contentTypeGatingEnabled={contentTypeGatingEnabled}
-              marketingUrl={marketingUrl}
-              upsellPageName="in_course"
-              userTimezone={userTimezone}
-              shouldDisplayBorder={false}
-              timeOffsetMillis={timeOffsetMillis}
-              courseId={courseId}
-              org={org}
-              upgradeNotificationCurrentState={upgradeNotificationCurrentState}
-              setupgradeNotificationCurrentState={setUpgradeNotificationCurrentState}
-            />
-          </PluginSlot>
+          />
         ) : (
           <p className="p-3 small">{intl.formatMessage(messages.noNotificationsMessage)}</p>
         )}
