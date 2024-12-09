@@ -1,12 +1,14 @@
+import { Suspense, lazy } from 'react';
 import { createPortal } from 'react-dom';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { Xpert } from '@edx/frontend-lib-learning-assistant';
 import { injectIntl } from '@edx/frontend-platform/i18n';
 
 import { VERIFIED_MODES } from '@src/constants';
 import { useModel } from '../../../generic/model-store';
+
+const Xpert = lazy(async () => ({ default: (await import('@edx/frontend-lib-learning-assistant')).Xpert }));
 
 const Chat = ({
   enabled,
@@ -54,7 +56,11 @@ const Chat = ({
     <>
       {/* Use a portal to ensure that component overlay does not compete with learning MFE styles. */}
       {shouldDisplayChat && (createPortal(
-        <Xpert courseId={courseId} contentToolsEnabled={contentToolsEnabled} unitId={unitId} />,
+        <div data-testid="xpert-portal">
+          <Suspense fallback={null}>
+            <Xpert courseId={courseId} contentToolsEnabled={contentToolsEnabled} unitId={unitId} />
+          </Suspense>
+        </div>,
         document.body,
       ))}
     </>

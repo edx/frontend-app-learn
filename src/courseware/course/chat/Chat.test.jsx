@@ -78,11 +78,13 @@ describe('Chat', () => {
           { store },
         );
 
-        const chat = screen.queryByTestId(mockXpertTestId);
+        const portal = screen.queryByTestId('xpert-portal');
+
         if (test.isVisible) {
-          expect(chat).toBeInTheDocument();
+          expect(portal).toBeInTheDocument();
+          expect(await screen.findByTestId(mockXpertTestId)).toBeInTheDocument();
         } else {
-          expect(chat).not.toBeInTheDocument();
+          expect(portal).not.toBeInTheDocument();
         }
       },
     );
