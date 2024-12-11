@@ -23,16 +23,17 @@ exports[`Unit component output snapshot: not bookmarked, do not show content 1`]
   <div
     className="mb-0"
   >
-    <h3
-      className="h3"
-    >
-      unit-title
-    </h3>
     <UnitTitleSlot
       courseId="test-course-id"
       unitId="test-props-id"
       unitTitle="unit-title"
-    />
+    >
+      <h3
+        className="h3"
+      >
+        unit-title
+      </h3>
+    </UnitTitleSlot>
   </div>
   <h2
     className="sr-only"

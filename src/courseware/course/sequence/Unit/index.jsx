@@ -49,8 +49,9 @@ const Unit = ({
   return (
     <div className="unit">
       <div className="mb-0">
-        <h3 className="h3">{unit.title}</h3>
-        <UnitTitleSlot courseId={courseId} unitId={id} unitTitle={unit.title} />
+        <UnitTitleSlot courseId={courseId} unitId={id} unitTitle={unit.title}>
+          <h3 className="h3">{unit.title}</h3>
+        </UnitTitleSlot>
       </div>
       <h2 className="sr-only">{formatMessage(messages.headerPlaceholder)}</h2>
       <BookmarkButton

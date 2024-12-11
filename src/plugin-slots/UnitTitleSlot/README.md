@@ -8,7 +8,7 @@
 
 ## Description
 
-This slot is used for adding content after the Unit title.
+This slot is used for adding content around the Unit title.
 
 ## Example
 
@@ -22,6 +22,7 @@ import { DIRECT_PLUGIN, PLUGIN_OPERATIONS } from '@openedx/frontend-plugin-frame
 const config = {
   pluginSlots: {
     unit_title_slot: {
+      keepDefault: true,
       plugins: [
         {
           // Insert custom content after unit title
@@ -33,7 +34,7 @@ const config = {
               <>
                 <p>📚: {courseId}</p>
                 <p>📙: {unitId}</p>
-                <p>📙: {unitTitle}</p>
+                <p>🎩: {unitTitle}</p>
               </>
             ),
           },
