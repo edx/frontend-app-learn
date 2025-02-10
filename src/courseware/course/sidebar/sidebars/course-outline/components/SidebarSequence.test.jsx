@@ -8,6 +8,7 @@ import courseOutlineMessages from '@src/course-home/outline-tab/messages';
 import { initializeMockApp, initializeTestStore } from '@src/setupTest';
 import messages from '../messages';
 import SidebarSequence from './SidebarSequence';
+import SidebarContext from '../../../SidebarContext';
 
 initializeMockApp();
 
@@ -34,13 +35,15 @@ describe('<SidebarSequence />', () => {
       <AppProvider store={store} wrapWithRouter={false}>
         <IntlProvider locale="en">
           <MemoryRouter>
-            <SidebarSequence
-              courseId={courseId}
-              defaultOpen={false}
-              sequence={sequence}
-              activeUnitId={sequence.unitIds[0]}
-              {...props}
-            />
+            <SidebarContext.Provider value={{ toggleSidebar: jest.fn() }}>
+              <SidebarSequence
+                courseId={courseId}
+                defaultOpen={false}
+                sequence={sequence}
+                activeUnitId={sequence.unitIds[0]}
+                {...props}
+              />
+            </SidebarContext.Provider>
           </MemoryRouter>
         </IntlProvider>
       </AppProvider>,
