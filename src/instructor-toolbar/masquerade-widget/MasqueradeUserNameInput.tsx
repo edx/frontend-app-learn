@@ -1,6 +1,6 @@
 import React from 'react';
 import { useIntl } from '@edx/frontend-platform/i18n';
-import { Input } from '@openedx/paragon';
+import { Form } from '@openedx/paragon';
 
 import { MasqueradeStatus, Payload } from './data/api';
 import messages from './messages';
@@ -40,11 +40,10 @@ export const MasqueradeUserNameInput: React.FC<Props> = ({ onSubmit, onError, ..
   }, [handleSubmit]);
 
   return (
-    <Input
+    <Form.Control
       aria-labelledby="masquerade-search-label"
       label={intl.formatMessage(messages.userNameLabel)}
       onKeyPress={handleKeyPress}
-      type="text"
       {...otherProps}
     />
   );
