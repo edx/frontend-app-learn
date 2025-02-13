@@ -1,5 +1,5 @@
 .discussions-sidebar-frame {
-    @media (max-width: -1 + map-get($grid-breakpoints, "xl")) {
+    @media (--pgn-size-breakpoint-max-width-xl) {
         max-height: calc(100vh - 65px);
     }
 }

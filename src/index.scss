@@ -1,7 +1,4 @@
-@import "~@edx/brand/paragon/fonts";
-@import "~@edx/brand/paragon/variables";
-@import "~@openedx/paragon/scss/core/core";
-@import "~@edx/brand/paragon/overrides";
+@use "@openedx/paragon/styles/css/core/custom-media-breakpoints" as paragonCustomMediaBreakpoints;
 
 @import "~@edx/frontend-component-footer/dist/footer";
 @import "~@edx/frontend-component-header/dist/index";
@@ -44,7 +41,7 @@
   .nav-link {
     border-bottom: 4px solid transparent;
     border-top: 4px solid transparent;
-    color: $gray-700;
+    color: var(--pgn-color-gray-700);
 
     // temporary until we can remove .btn class from dropdowns
     border-left: 0;
@@ -54,9 +51,9 @@
     &:hover,
     &:focus,
     &.active {
-      font-weight: $font-weight-normal;
-      color: $primary-500;
-      border-bottom-color: $primary-500;
+      font-weight: var(--pgn-typography-font-weight-normal);
+      color: var(--pgn-color-primary-500);
+      border-bottom-color: var(--pgn-color-primary-500);
     }
   }
 }
@@ -75,7 +72,7 @@
 }
 
 .sequence {
-  @media (min-width: map-get($grid-breakpoints, "sm")) {
+  @media (--pgn-size-breakpoint-min-width-sm) {
     border: solid 1px #eaeaea;
     border-radius: 4px;
   }
@@ -87,7 +84,7 @@
 }
 
 .notification-btn {
-  @media (max-width: -1 + map-get($grid-breakpoints, "sm")) {
+  @media (--pgn-size-breakpoint-max-width-xs) {
     height: 3rem;
   }
 }
@@ -96,15 +93,15 @@
   display: flex;
   flex-grow: 1;
 
-  @media (max-width: -1 + map-get($grid-breakpoints, "sm")) {
+  @media (--pgn-size-breakpoint-max-width-xs) {
     max-width: 100%;
   }
 
-  @media (min-width: map-get($grid-breakpoints, "sm")) {
+  @media (--pgn-size-breakpoint-min-width-sm) {
     margin: -1px -1px 0;
   }
 
-  @media (max-width: -1 + map-get($grid-breakpoints, "sm")) {
+  @media (--pgn-size-breakpoint-max-width-xs) {
     width: 100% !important;
   }
 
@@ -120,13 +117,13 @@
     height: 3rem;
     justify-content: center;
     align-items: center;
-    color: $gray-500;
+    color: var(--pgn-color-gray-500);
     white-space: nowrap;
 
     &:hover,
     &:focus,
     &.active {
-      color: $gray-700;
+      color: var(--pgn-color-gray-700);
     }
 
     &:focus {
@@ -141,13 +138,13 @@
         left: 0;
         right: 0;
         height: 2px;
-        background: $primary;
+        background: var(--pgn-color-primary-base);
       }
     }
 
     &.complete {
       background-color: #eef7e5;
-      color: $success;
+      color: var(--pgn-color-success-base);
     }
 
     &:first-child {
@@ -211,12 +208,12 @@
         min-width: 0;
         margin: 0 1rem;
         text-overflow: ellipsis;
-        color: $gray-700;
+        color: var(--pgn-color-gray-700);
       }
 
       &.active {
         .unit-icon {
-          color: $primary-500;
+          color: var(--pgn-color-primary-500);
         }
 
         &:after {
@@ -228,7 +225,7 @@
           right: auto;
           width: 2px;
           height: auto;
-          background: $primary;
+          background: var(--pgn-color-primary-base);
         }
       }
     }
@@ -243,18 +240,18 @@
 
   .previous-btn,
   .next-btn {
-    border: 1px solid $light-400 !important;
-    color: $gray-700;
+    border: 1px solid var(--pgn-color-light-400) !important;
+    color: var(--pgn-color-gray-700);
     display: inline-flex;
     justify-content: center;
     align-items: center;
 
-    @media (max-width: -1 + map-get($grid-breakpoints, "sm")) {
+    @media (--pgn-size-breakpoint-max-width-sm) {
       padding-top: 1rem;
       padding-bottom: 1rem;
     }
 
-    @media (min-width: map-get($grid-breakpoints, "sm")) {
+    @media (--pgn-size-breakpoint-min-width-sm) {
       min-width: fit-content;
       padding-left: 2rem;
       padding-right: 2rem;
@@ -265,7 +262,7 @@
     border-left-width: 0;
     margin-left: 0;
 
-    @media (min-width: map-get($grid-breakpoints, "sm")) {
+    @media (--pgn-size-breakpoint-min-width-sm) {
       border-left-width: 1px;
       border-top-left-radius: 4px;
     }
@@ -275,7 +272,7 @@
     border-left-width: 1px;
     border-right-width: 0;
 
-    @media (min-width: map-get($grid-breakpoints, "sm")) {
+    @media (--pgn-size-breakpoint-min-width-sm) {
       border-top-right-radius: 4px;
       border-right-width: 1px;
     }
@@ -289,9 +286,9 @@
   margin-left: auto;
   margin-right: auto;
 
-  @media (min-width: map-get($grid-breakpoints, "sm")) {
-    padding-left: $grid-gutter-width;
-    padding-right: $grid-gutter-width;
+  @media (--pgn-size-breakpoint-min-width-sm) {
+    padding-left: var(--pgn-spacing-grid-gutter-width);
+    padding-right: var(--pgn-spacing-grid-gutter-width);
   }
 
   @media (min-width: 830px) {
@@ -309,8 +306,8 @@
   // here we compensate for the padding of the parent div with "container-xl"
   // class to ensure that the viewport width is the same as the width of the
   // iframe.
-  margin-left: -$grid-gutter-width * .5;
-  margin-right: -$grid-gutter-width * .5;
+  margin-left: calc(var(--pgn-spacing-grid-gutter-width) * -0.5);
+  margin-right: calc(var(--pgn-spacing-grid-gutter-width) * -0.5);
 
   margin-bottom: 2rem;
 
@@ -331,9 +328,9 @@
   max-width: 640px;
   margin: 0 auto;
 
-  @media (max-width: -1 + map-get($grid-breakpoints, "sm")) {
+  @media (--pgn-size-breakpoint-max-width-xs) {
     flex-direction: column;
-    gap: $spacer;
+    gap: var(--pgn-spacing-spacer-base);
   }
 
   .previous-button,
@@ -348,7 +345,7 @@
   .next-button {
     flex-basis: 75%;
 
-     @media (max-width: -1 + map-get($grid-breakpoints, "sm")) {
+     @media (--pgn-size-breakpoint-max-width-xs) {
        flex-basis: 100%;
      }
   }
@@ -356,7 +353,7 @@
   .previous-button {
     flex-basis: 25%;
 
-     @media (max-width: -1 + map-get($grid-breakpoints, "sm")) {
+     @media (--pgn-size-breakpoint-max-width-xs) {
        flex-basis: 100%;
      }
   }
@@ -368,7 +365,7 @@
 
   .next-button,
   .previous-button {
-    @media (min-width: map-get($grid-breakpoints, "md")) {
+    @media (--pgn-size-breakpoint-min-width-md) {
       flex-basis: auto;
       min-width: 8rem;
     }
@@ -420,8 +417,8 @@
 
 .icon-hover {
   &:hover {
-    color: $primary-500 !important;
-    background-color: $light-300 !important;
+    color: var(--pgn-color-primary-500) !important;
+    background-color: var(--pgn-color-light-300) !important;
   }
 }
 

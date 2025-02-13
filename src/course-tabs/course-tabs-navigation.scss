@@ -5,13 +5,13 @@
   .nav a,
   .nav button {
     &:hover {
-      background-color: $light-400;
+      background-color: var(--pgn-color-light-400);
     }
   }
 
   .nav a {
     &:not(.active):hover {
-      background-color: $light-400;
+      background-color: var(--pgn-color-light-400);
       border-bottom: none;
     }
   }
