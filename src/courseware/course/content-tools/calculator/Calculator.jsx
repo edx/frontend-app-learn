@@ -157,7 +157,7 @@ class Calculator extends Component {
                   />
                 </li>
               </ul>
-              <table className="table small">
+              <table className="pgn__data-table small">
                 <thead>
                   <tr>
                     <th scope="col">

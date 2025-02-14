@@ -4,4 +4,19 @@
     background-color: #f1f1f1;
     box-shadow: 0 -1px 0 0 #ddd;
   }
+
+  table {
+    tr {
+      border-bottom: var(--pgn-size-border-width) solid var(--pgn-color-border);
+    }
+
+    thead tr {
+      border-bottom: calc(2 *  var(--pgn-size-border-width)) solid var(--pgn-color-border);
+      border-top: var(--pgn-size-border-width) solid var(--pgn-color-border);
+    }
+  
+    tbody tr {
+      vertical-align: top;
+    }
+  }
 }
