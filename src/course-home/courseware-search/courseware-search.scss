@@ -5,8 +5,8 @@
   left: 0;
   right: 0;
   bottom: 0;
-  border-top: 1px solid $light-300;
-  z-index: $zindex-modal; // Bootstrap's z-index layer for Modals.
+  border-top: 1px solid var(--pgn-color-light-300);
+  z-index: var(--pgn-elevation-modal-zindex); // Bootstrap's z-index layer for Modals.
 
   &__close {
     position: absolute !important; // For some reason it gets overridden
@@ -35,7 +35,7 @@
 
   &__results-summary {
     font-size: .9rem;
-    color: $gray-500;
+    color: var(--pgn-color-gray-500);
     padding: 1rem 0 .5rem;
   }
 
@@ -50,7 +50,7 @@
   margin-top: 1.5rem;
 
   &__empty {
-    color: $gray-500;
+    color: var(--pgn-color-gray-500);
     padding: 6rem 0;
     text-align: center;
   }
@@ -64,17 +64,17 @@
 
     &:hover {
       text-decoration: none;
-      background: $light-300;
+      background: var(--pgn-color-light-300);
     }
 
     &:not(:first-child) {
-      border-top: 1px solid $light-300;
+      border-top: 1px solid var(--pgn-color-light-300);
     }
   }
 
   &__icon {
     padding: 0.375rem 0 0 0.375rem;
-    color: $gray-300;
+    color: var(--pgn-color-gray-300);
   }
 
   &__info {
@@ -87,7 +87,7 @@
     align-items: center;
     line-height: 2.5;
     font-size: 0.875rem;
-    color: $black;
+    color: var(--pgn-color-black);
 
     > span {
       display: block;
@@ -101,7 +101,7 @@
       font-variant-numeric: lining-nums tabular-nums;
       min-width: 1.25rem;
       line-height: 1rem;
-      background: $light-300;
+      background: var(--pgn-color-light-300);
       border-radius: 99rem;
       font-style: normal;
       margin-left: 0.375rem;
@@ -113,7 +113,7 @@
   &__breadcrumbs {
     display: flex;
     gap: 1.25rem;
-    color: $gray-500;
+    color: var(--pgn-color-gray-500);
     overflow: hidden;
     list-style: none;
     padding: 0;
@@ -144,14 +144,14 @@
 }
 
 .courseware-search-results-tabs {
-  border-bottom-color: $gray-400 !important;
+  border-bottom-color: var(--pgn-color-gray-400) !important;
 
   &.nav-tabs .nav-link.active {
     border-bottom-width: 4px !important;
   }
 }
 
-@media (min-width: map-get($grid-breakpoints, 'md')) {
+@media (--pgn-size-breakpoint-min-width-md) {
   .courseware-search__content {
     padding-top: 8rem;
   }

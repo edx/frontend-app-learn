@@ -1,10 +1,10 @@
 .outline-sidebar-proctoring-panel {
-  border: 1px solid $dark-500;
-  border-top: 5px solid $brand-600;
+  border: 1px solid var(--pgn-color-dark-500);
+  border-top: 5px solid var(--pgn-color-brand-600);
 }
 .proctoring-onboarding-success {
-  border-top: 5px solid $primary-500;
+  border-top: 5px solid var(--pgn-color-primary-500);
 }
 .proctoring-onboarding-submitted {
-  border-top: 5px solid $dark-500;
+  border-top: 5px solid var(--pgn-color-dark-500);
 }

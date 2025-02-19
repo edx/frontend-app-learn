@@ -1,22 +1,21 @@
-@import "~@edx/brand/paragon/variables";
-@import "~@openedx/paragon/scss/core/core";
-@import "~@edx/brand/paragon/overrides";
+
+@use "~@edx/brand/paragon/overrides";
 
 .flag-button {
-  background-color: $white;
-  border: 1px solid $light-400;
+  background-color: var(--pgn-color-white);
+  border: 1px solid var(--pgn-color-light-400);
   border-radius: .2rem;
-  box-shadow: 0 0 0 2px $light-400;
+  box-shadow: 0 0 0 2px var(--pgn-color-light-400);
 
   &:hover {
-    border: 1px solid $primary-300;
-    box-shadow: 0 0 0 2px $white;
+    border: 1px solid var(--pgn-color-primary-300);
+    box-shadow: 0 0 0 2px var(--pgn-color-white);
   }
 }
 
 .flag-button-selected {
-  border: 1px solid $primary-300;
-  box-shadow: 0 0 0 2px $primary-300;
+  border: 1px solid var(--pgn-color-primary-300);
+  box-shadow: 0 0 0 2px var(--pgn-color-primary-300);
   pointer-events: none;
 }
 

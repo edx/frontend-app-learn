@@ -7,7 +7,7 @@
 }
 
 .outline-sidebar {
-    @media (min-width: map-get($grid-breakpoints, "xl")) {
+    @media (--pgn-size-breakpoint-min-width-xl) {
         position: absolute;
         left: 0;
         top: 0;
@@ -25,12 +25,12 @@
     }
 
     .outline-sidebar-heading {
-        font-weight: $font-weight-bold;
+        font-weight: var(--pgn-typography-font-weight-bold);
     }
 }
 
 .course-sidebar-section {
-    background: $white;
+    background: var(--pgn-color-white);
     border: 1px solid #d7d3d1;
 
     button {
@@ -54,7 +54,7 @@
 #outline-sidebar-outline {
     margin-top: -1px;
 
-    @media (min-width: map-get($grid-breakpoints, "xl")) {
+    @media (--pgn-size-breakpoint-min-width-xl) {
         margin-bottom: 0;
     }
 
@@ -64,23 +64,19 @@
 
         .collapsible-trigger {
             border-radius: 0;
-            padding: map-get($spacers, 3\.5) map-get($spacers, 4) map-get($spacers, 3\.5) map-get($spacers, 5);
+            padding: var(--pgn-spacing-spacer-3-5) var(--pgn-spacing-spacer-4) var(--pgn-spacing-spacer-3-5) var(--pgn-spacing-spacer-5);
 
-            @media (max-width: -1 + map-get($grid-breakpoints, "sm")) {
-                padding-left: map-get($spacers, 4);
+            @media (--pgn-size-breakpoint-max-width-sm) {
+                padding-left: var(--pgn-spacing-spacer-4);
             }
 
             &:hover {
-                background-color: $light-500;
+                background-color: var(--pgn-color-light-500);
             }
 
             .collapsible-icon {
                 margin-inline-start: initial;
             }
-        }
-
-        &:last-child .pgn_collapsible {
-            @extend .mb-0;
         }
     }
 
@@ -88,15 +84,15 @@
         padding: 0;
 
         ol li > a {
-            padding: map-get($spacers, 3\.5) map-get($spacers, 4) map-get($spacers, 3\.5) map-get($spacers, 5\.5);
+            padding: var(--pgn-spacing-spacer-3-5) var(--pgn-spacing-spacer-4) var(--pgn-spacing-spacer-3-5) var(--pgn-spacing-spacer-5-5);
 
-            @media (max-width: -1 + map-get($grid-breakpoints, "sm")) {
-                padding-left: map-get($spacers, 4\.5);
+            @media (--pgn-size-breakpoint-max-width-sm) {
+                padding-left: var(--pgn-spacing-spacer-4-5);
             }
 
             &:hover {
                 text-decoration: none;
-                background-color: $light-500;
+                background-color: var(--pgn-color-light-500);
             }
         }
     }

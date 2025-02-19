@@ -7,11 +7,11 @@
 }
 
 .upsell-warning {
-  background-color: $danger-100;
+  background-color: var(--pgn-color-danger-100);
 }
 
 .upsell-warning-light {
-  background-color: $warning-100;
+  background-color: var(--pgn-color-warning-100);
 }
 
 .upsell-warning, .upsell-warning-light {
@@ -36,7 +36,7 @@
 }
 
 .discount-info {
-  border-top: 1px solid $light-400;
+  border-top: 1px solid var(--pgn-color-light-400);
   padding-top: .75rem;
   padding-bottom: .75rem;
 }
