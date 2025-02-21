@@ -1,5 +1,5 @@
 diff --git a/node_modules/@openedx/frontend-build/config/webpack.prod.config.js b/node_modules/@openedx/frontend-build/config/webpack.prod.config.js
-index 2879dd9..9efd0fc 100644
+index a258fda..1d2995f 100644
 --- a/node_modules/@openedx/frontend-build/config/webpack.prod.config.js
 +++ b/node_modules/@openedx/frontend-build/config/webpack.prod.config.js
 @@ -12,6 +12,7 @@ const NewRelicSourceMapPlugin = require('@edx/new-relic-source-map-webpack-plugi

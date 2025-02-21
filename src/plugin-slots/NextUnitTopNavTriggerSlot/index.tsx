@@ -10,7 +10,6 @@ interface Props {
   buttonText: string | '';
   nextLink: string;
   sequenceId: string;
-  unitId: string;
   onClickHandler: () => void;
   variant: string;
   buttonStyle: string;

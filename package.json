@@ -37,19 +37,20 @@
     "@edx/brand": "npm:@openedx/brand-openedx@^1.2.2",
     "@edx/browserslist-config": "1.4.0",
     "@edx/frontend-component-header": "^5.8.0",
+    "@edx/frontend-component-footer": "npm:@adamstankiewicz/openedx-frontend-component-footer@^14.2.2",
     "@edx/frontend-lib-learning-assistant": "^2.14.2",
     "@edx/frontend-lib-special-exams": "^3.1.3",
-    "@edx/frontend-platform": "^8.0.0",
+    "@edx/frontend-platform": "^8.2.1",
     "@edx/openedx-atlas": "^0.6.0",
     "@edx/react-unit-test-utils": "3.0.0",
     "@fortawesome/free-brands-svg-icons": "5.15.4",
     "@fortawesome/free-regular-svg-icons": "5.15.4",
     "@fortawesome/free-solid-svg-icons": "5.15.4",
     "@fortawesome/react-fontawesome": "^0.1.4",
-    "@openedx/frontend-build": "^14.2.0",
-    "@openedx/frontend-plugin-framework": "^1.2.1",
-    "@openedx/frontend-slot-footer": "^1.0.2",
-    "@openedx/paragon": "^22.3.0",
+    "@openedx/frontend-build": "^14.3.1",
+    "@openedx/frontend-plugin-framework": "^1.5.0",
+    "@openedx/frontend-slot-footer": "npm:@adamstankiewicz/openedx-frontend-slot-footer@^1.1.5",
+    "@openedx/paragon": "^22.15.2",
     "@popperjs/core": "2.11.8",
     "@reduxjs/toolkit": "1.8.1",
     "buffer": "^6.0.3",
@@ -97,7 +98,7 @@
     "files": [
       {
         "path": "dist/*.js",
-        "maxSize": "1350kB"
+        "maxSize": "1400kB"
       }
     ],
     "normalizeFilenames": "^.+?(\\..+?)\\.\\w+$"
