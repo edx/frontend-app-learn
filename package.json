@@ -45,7 +45,7 @@
     "@fortawesome/free-brands-svg-icons": "5.15.4",
     "@fortawesome/free-regular-svg-icons": "5.15.4",
     "@fortawesome/free-solid-svg-icons": "5.15.4",
-    "@fortawesome/react-fontawesome": "^0.1.4",
+    "@fortawesome/react-fontawesome": "^0.2.0",
     "@openedx/frontend-build": "^14.2.0",
     "@openedx/frontend-plugin-framework": "^1.2.1",
     "@openedx/frontend-slot-footer": "^1.0.2",
