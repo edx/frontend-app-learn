@@ -76,7 +76,7 @@
     "sass": "^1.79.3",
     "sass-loader": "^16.0.2",
     "source-map-loader": "^5.0.0",
-    "truncate-html": "1.0.4"
+    "truncate-html": "1.2.0"
   },
   "devDependencies": {
     "@edx/reactifex": "2.2.0",
