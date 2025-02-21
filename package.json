@@ -19,7 +19,7 @@
     "postinstall": "patch-package",
     "snapshot": "fedx-scripts jest --updateSnapshot",
     "start": "fedx-scripts webpack-dev-server --progress",
-    "dev": "PUBLIC_PATH=/learning/ MFE_CONFIG_API_URL='http://localhost:8000/api/mfe_config/v1' fedx-scripts webpack-dev-server --progress --host apps.local.openedx.io",
+    "dev": "PUBLIC_PATH=/learning/ MFE_CONFIG_API_URL='http://localhost:8000/api/mfe_config/v1' fedx-scripts webpack-dev-server --progress --host apps.local.edly.io",
     "test": "fedx-scripts jest --coverage --passWithNoTests",
     "test:watch": "fedx-scripts jest --watch --passWithNoTests",
     "types": "tsc --noEmit"
@@ -49,7 +49,7 @@
     "@openedx/frontend-build": "^14.2.0",
     "@openedx/frontend-plugin-framework": "^1.2.1",
     "@openedx/frontend-slot-footer": "^1.0.2",
-    "@openedx/paragon": "^22.3.0",
+    "@openedx/paragon": "npm:@braden-preview/paragon@22.9.2",
     "@popperjs/core": "2.11.8",
     "@reduxjs/toolkit": "1.8.1",
     "buffer": "^6.0.3",
