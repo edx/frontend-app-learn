@@ -49,7 +49,7 @@
     "@openedx/frontend-build": "^14.2.0",
     "@openedx/frontend-plugin-framework": "^1.2.1",
     "@openedx/frontend-slot-footer": "^1.0.2",
-    "@openedx/paragon": "^22.3.0",
+    "@openedx/paragon": "^23.0.0",
     "@popperjs/core": "2.11.8",
     "@reduxjs/toolkit": "1.8.1",
     "buffer": "^6.0.3",
