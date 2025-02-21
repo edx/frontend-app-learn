@@ -7,6 +7,8 @@ import { sendTrackEvent, sendTrackingLogEvent } from '@edx/frontend-platform/ana
 
 import { initializeMockApp, initializeTestStore } from '@src/setupTest';
 import SidebarUnit from './SidebarUnit';
+import SidebarContext from '../../../SidebarContext';
+import { ID } from '../constants';
 
 jest.mock('@edx/frontend-platform/analytics', () => ({
   sendTrackEvent: jest.fn(),
@@ -20,6 +22,13 @@ describe('<SidebarUnit />', () => {
   let unit;
   let sequenceId;
 
+  // A default context for desktop mode.
+  const defaultSidebarContext = {
+    toggleSidebar: jest.fn(),
+    shouldDisplayFullScreen: false,
+    currentSidebar: ID,
+  };
+
   const initTestStore = async (options) => {
     store = await initializeTestStore(options);
     const state = store.getState();
@@ -28,21 +37,23 @@ describe('<SidebarUnit />', () => {
     unit = state.courseware.courseOutline.units[sequence.unitIds[0]];
   };
 
-  function renderWithProvider(props = {}) {
+  function renderWithProvider(props = {}, sidebarContext = defaultSidebarContext) {
     const { container } = render(
       <AppProvider store={store} wrapWithRouter={false}>
         <IntlProvider locale="en">
           <MemoryRouter>
-            <SidebarUnit
-              isFirst
-              id={unit.id}
-              courseId="course123"
-              sequenceId={sequenceId}
-              unit={{ ...unit, icon: 'video', isLocked: false }}
-              isActive={false}
-              activeUnitId={unit.id}
-              {...props}
-            />
+            <SidebarContext.Provider value={sidebarContext}>
+              <SidebarUnit
+                isFirst
+                id={unit.id}
+                courseId="course123"
+                sequenceId={sequenceId}
+                unit={{ ...unit, icon: 'video', isLocked: false }}
+                isActive={false}
+                activeUnitId={unit.id}
+                {...props}
+              />
+            </SidebarContext.Provider>
           </MemoryRouter>
         </IntlProvider>
       </AppProvider>,
@@ -87,22 +98,45 @@ describe('<SidebarUnit />', () => {
     expect(screen.getByText(unit.title)).toBeInTheDocument();
   });
 
-  it('sends log event correctly when unit is clicked', async () => {
-    const user = userEvent.setup();
-    await initTestStore();
-    renderWithProvider({ unit: { ...unit } });
-    const logData = {
-      id: unit.id,
-      current_tab: 1,
-      tab_count: 1,
-      target_id: unit.id,
-      target_tab: 1,
-      widget_placement: 'left',
-    };
+  describe('When a unit is clicked', () => {
+    it('sends log event correctly', async () => {
+      const user = userEvent.setup();
+      await initTestStore();
+      renderWithProvider({ unit: { ...unit } });
+      const logData = {
+        id: unit.id,
+        current_tab: 1,
+        tab_count: 1,
+        target_id: unit.id,
+        target_tab: 1,
+        widget_placement: 'left',
+      };
 
-    await user.click(screen.getByText(unit.title));
+      await user.click(screen.getByText(unit.title));
 
-    expect(sendTrackEvent).toHaveBeenCalledWith('edx.ui.lms.sequence.tab_selected', logData);
-    expect(sendTrackingLogEvent).toHaveBeenCalledWith('edx.ui.lms.sequence.tab_selected', logData);
+      expect(sendTrackEvent).toHaveBeenCalledWith('edx.ui.lms.sequence.tab_selected', logData);
+      expect(sendTrackingLogEvent).toHaveBeenCalledWith('edx.ui.lms.sequence.tab_selected', logData);
+    });
+
+    it('leaves sidebar open in desktop mode', async () => {
+      const user = userEvent.setup();
+      await initTestStore();
+      renderWithProvider({ unit: { ...unit } });
+      await user.click(screen.getByText(unit.title));
+
+      expect(defaultSidebarContext.toggleSidebar).not.toHaveBeenCalled();
+      expect(window.sessionStorage.getItem('hideCourseOutlineSidebar')).toBeNull();
+    });
+
+    it('closes sidebar on mobile devices', async () => {
+      const user = userEvent.setup();
+      await initTestStore();
+      renderWithProvider({ unit: { ...unit } }, { ...defaultSidebarContext, shouldDisplayFullScreen: true });
+      await user.click(screen.getByText(unit.title));
+
+      expect(defaultSidebarContext.toggleSidebar).toHaveBeenCalledTimes(1);
+      expect(defaultSidebarContext.toggleSidebar).toHaveBeenCalledWith(null);
+      expect(window.sessionStorage.getItem('hideCourseOutlineSidebar')).toEqual('true');
+    });
   });
 });

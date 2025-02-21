@@ -7,6 +7,7 @@ import { sendTrackEvent, sendTrackingLogEvent } from '@edx/frontend-platform/ana
 
 import { checkBlockCompletion } from '@src/courseware/data';
 import { getCourseOutline } from '@src/courseware/data/selectors';
+import { useCourseOutlineSidebar } from '../hooks';
 import messages from '../messages';
 import UnitIcon, { UNIT_ICON_TYPES } from './UnitIcon';
 
@@ -28,6 +29,7 @@ const SidebarUnit = ({
   } = unit;
   const dispatch = useDispatch();
   const { sequences = {} } = useSelector(getCourseOutline);
+  const { handleToggleCollapse, shouldDisplayFullScreen } = useCourseOutlineSidebar();
 
   const logEvent = (eventName, widgetPlacement) => {
     const findSequenceByUnitId = (unitId) => Object.values(sequences).find(seq => seq.unitIds.includes(unitId));
@@ -53,6 +55,11 @@ const SidebarUnit = ({
   const handleClick = () => {
     logEvent('edx.ui.lms.sequence.tab_selected', 'left');
     dispatch(checkBlockCompletion(courseId, sequenceId, activeUnitId));
+
+    // Hide the sidebar after selecting a unit on a mobile device.
+    if (shouldDisplayFullScreen) {
+      handleToggleCollapse();
+    }
   };
 
   const iconType = isLocked ? UNIT_ICON_TYPES.lock : icon;
